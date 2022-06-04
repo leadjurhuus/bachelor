@@ -82,7 +82,7 @@ prod_kombi=[]
 prod_hp=[]
 
 
-############Specifikationer for elektrisk
+############Specifikationer for BIP og MESHP
 
 max_vaerk=63.8 #MW
 
@@ -118,11 +118,6 @@ def borderline_flis(): #Kaldes i flow chart borderline boiler no. 2
         
 def borderline_hp(): #Kaldes i flowcharts borderline SHP no. 2
     prod_hp.append(min_hp)
-    #if con_total[i]-min_hp<min_flis[i]:
-    #    print('hejsa')
-    #    borderline_flis1()
-    #else:
-    #    print('halløj')
     prod_flis.append(con_total[i]-min_hp)
         
 
