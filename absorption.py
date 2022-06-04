@@ -276,7 +276,7 @@ max_total=max_hp+max_flis
 
 
 ##Metoder
-def borderline_flis(): #Kaldes i flow chart borderline boiler no. 2
+def borderline_flis(): #Kaldes i flow chart borderline BIP no. 2
 #    prod_flis.append(min_flis[i])
     if con_total[i]-min_flis[i]<=0:
         prod_flis.append(min_flis[i])
