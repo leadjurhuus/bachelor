@@ -17,11 +17,12 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
-#import statistics
 cwd=os.getcwd()
 
 #Henter pris data fra 2018
-fil=os.path.join(cwd, 'nordpoolmarket_2019.csv') #DKK/MWh
+#fil=os.path.join(cwd, 'nordpoolmarket_2018.csv') #DKK/MWh 2018
+fil=os.path.join(cwd, 'nordpoolmarket_2019.csv') #DKK/MWh 2019
+#fil=os.path.join(cwd, 'nordpoolmarket_2020.csv') #DKK/MWh 2020 (skudår)
 df=pd.read_csv(fil)
 
 df.drop(1)
@@ -29,7 +30,7 @@ df.drop(df.index[0:46],0,inplace=True)
 #Fjerner DK2
 priser_DK1 = df[df.index % 2 == 0]
     
-#Hiver spotprisen ud
+#Hiver spotprisen for DK1 ud
 spotpris=list(priser_DK1.SpotPriceDKK) #DKK/MWh
 
 ##Hente forbrugsdata
@@ -44,57 +45,6 @@ con_total = [0 if i < 0 else i for i in con_total] #Fjerner negative værdier og
 #fra "Klimastatus og –fremskrivning 2022 (KF22):Brændselspriser"
 flis_pris_opvarm=51*3600*0.001 #DKK/MWh
 
-#"""
-#Basecase
-flis_pris= [flis_pris_opvarm for i in range(2190)]
-flis_pris.extend(flis_pris_opvarm for i in range(2*2190))
-flis_pris.extend(flis_pris_opvarm for i in range(2190))
-#"""
-
-##########################################################
-#Priser absorption
-"""
-#Absorption eta=0.5, 250grader, luft
-flis_pris= [185.08 for i in range(2190)]
-flis_pris.extend(173.86 for i in range(2*2190))
-flis_pris.extend(185.08 for i in range(2190))
-"""
-
-
-"""
-#Absorption eta=0.5, 250grader, hav
-flis_pris= [183.6 for i in range(2190)]
-flis_pris.extend(172.56 for i in range(2*2190))
-flis_pris.extend(183.6 for i in range(2190))
-"""
-
-"""
-#Absorption eta=0.7, 250grader, luft
-flis_pris= [139.94 for i in range(2190)]
-flis_pris.extend(131.14 for i in range(2*2190))
-flis_pris.extend(139.94 for i in range(2190))
-"""
-
-"""
-#Absorption eta=0.7, 250grader, hav
-flis_pris= [139.09 for i in range(2190)]
-flis_pris.extend(131.14 for i in range(2*2190))
-flis_pris.extend(139.09 for i in range(2190))
-"""
-
-"""
-#Absorption eta=0.5, 450grader, luft
-flis_pris= [149.03 for i in range(2190)]
-flis_pris.extend(137.43 for i in range(2*2190))
-flis_pris.extend(149.03 for i in range(2190))
-"""
-
-"""
-#Absorption eta=0.5, 450grader, hav
-flis_pris= [147.12 for i in range(2190)]
-flis_pris.extend(137.43 for i in range(2*2190))
-flis_pris.extend(147.12 for i in range(2190))
-"""
 
 
 ########################################################
@@ -105,12 +55,12 @@ flis_pris= [123.55 for i in range(2190)]
 flis_pris.extend(116.17 for i in range(2*2190))
 flis_pris.extend(123.55 for i in range(2190))
 """
-#Price reciproating sea
-"""
+#Price reciproating sea DETTE ER DEN BEDSTE
+#"""
 flis_pris= [122.17 for i in range(2190)]
 flis_pris.extend(115.92 for i in range(2*2190))
 flis_pris.extend(122.17 for i in range(2190))
-"""
+#"""
 
 #Price rotary screw air
 """
@@ -132,64 +82,6 @@ cop= [3 for i in range(2190)]
 cop.extend(3.5 for i in range(2*2190))
 cop.extend(3 for i in range(2190))
 
-#"""
-#Basecase
-copmek= [1 for i in range(2190)]
-copmek.extend(1 for i in range(2*2190))
-copmek.extend(1 for i in range(2190))
-#"""
-
-##############################################
-#COP for absorption
-
-"""
-#Absorption eta=0.5, 250grader, luft
-copmek= [0.99 for i in range(2190)]
-copmek.extend(1.07 for i in range(2*2190))
-copmek.extend(0.99 for i in range(2190))
-copmek=np.asarray(copmek)
-"""
-
-"""
-#Absorption eta=0.5, 250grader, hav
-copmek= [1 for i in range(2190)]
-copmek.extend(1.08 for i in range(2*2190))
-copmek.extend(1 for i in range(2190))
-copmek=np.asarray(copmek)
-"""
-
-"""
-#Absorption eta=0.7, 250grader, luft
-copmek= [1.39 for i in range(2190)]
-copmek.extend(1.5 for i in range(2*2190))
-copmek.extend(1.39 for i in range(2190))
-copmek=np.asarray(copmek)
-"""
-
-"""
-#Absorption eta=0.7, 250grader, hav
-copmek= [1.4 for i in range(2190)]
-copmek.extend(1.5 for i in range(2*2190))
-copmek.extend(1.4 for i in range(2190))
-copmek=np.asarray(copmek)
-"""
-
-"""
-#Absorption eta=0.5, 450grader, luft
-copmek= [1.29 for i in range(2190)]
-copmek.extend(1.42 for i in range(2*2190))
-copmek.extend(1.29 for i in range(2190))
-copmek=np.asarray(copmek)
-"""
-
-"""
-#Absorption eta=0.5, 250grader, luft
-copmek= [1.31 for i in range(2190)]
-copmek.extend(1.42 for i in range(2*2190))
-copmek.extend(1.31 for i in range(2190))
-copmek=np.asarray(copmek)
-"""
-
 
 
 ################################################
@@ -202,13 +94,13 @@ copmek.extend(2.72 for i in range(2*2190))
 copmek.extend(2.44 for i in range(2190))
 copmek=np.asarray(copmek)
 """
-"""
-#Reciprocating sea
+#"""
+#Reciprocating sea DETTE ER DEN BEDSTE
 copmek= [2.49 for i in range(2190)]
 copmek.extend(2.73 for i in range(2*2190))
 copmek.extend(2.49 for i in range(2190))
 copmek=np.asarray(copmek)
-"""
+#"""
 """
 #Rotary screw air
 copmek= [2.29 for i in range(2190)]
@@ -223,51 +115,27 @@ copmek.extend(2.54 for i in range(2*2190))
 copmek.extend(2.32 for i in range(2190))
 copmek=np.asarray(copmek)
 """
+
 tid=list(range(0, 8760))
 
-
-
-#Lister for hvor meget de forskellige værker producerer
+#Lister for hvor meget de forskellige enheder producerer
 spids_belast=[]
 prod_flis=[]
 prod_kombi=[]
 prod_hp=[]
 
 
-############Specifikationer for elektrisk
+############Specifikationer for anlægget
 
 max_vaerk=63.8 #MW
 
 min_hp=0.5*25
 max_hp=50 #MW
 
-#"""
-##Basecase
-max_flis= [max_vaerk for i in range(8760)]
-max_flis=np.asarray(max_flis)
-min_flis=[max_vaerk*0.7 for i in range(8760)]
-max_total=[max_vaerk+max_hp for i in range(8760)]
-#"""
 
 ####################################################
 
-"""
-##Med absorption varmepumpe
-mek_fra_flis=max_vaerk*0.8*copmek
-varm_fra_flis=max_vaerk*0.2
-
-max_flis=varm_fra_flis+mek_fra_flis #MW
-min_flis=0.7*max_flis
-
-
-max_total=max_hp+max_flis
-"""
-
-
-
-####################################################
-
-"""
+#"""
 ##Med mekanisk varmepumpe
 mek_fra_flis=max_vaerk*0.3375*copmek
 varm_fra_flis=max_vaerk*0.6625
@@ -277,7 +145,7 @@ min_flis=0.7*max_flis
 
 
 max_total=max_hp+max_flis
-"""
+#"""
 
 
 ##Metoder
@@ -299,17 +167,15 @@ def borderline_flis(): #Kaldes i flow chart borderline boiler no. 2
         
 def borderline_hp(): #Kaldes i flowcharts borderline SHP no. 2
     prod_hp.append(min_hp)
-    #if con_total[i]-min_hp<min_flis[i]:
-    #    print('hejsa')
-    #    borderline_flis1()
-    #else:
-    #    print('halløj')
     prod_flis.append(con_total[i]-min_hp)
         
 
 def borderline_flis1(): #Kaldes i flowcharts borderline boiler
     if con_total[i]>=min_hp and spotpris[i]*(1/cop[i])*con_total[i]<min_flis[i]*flis_pris[i]:
         prod_hp.append(con_total[i])
+        prod_flis.append(0)
+    elif spotpris[i]*(1/cop[i])*min_hp<min_flis[i]*flis_pris[i]: 
+        prod_hp.append(min_hp)
         prod_flis.append(0)
     else:
         prod_hp.append(0)
@@ -371,33 +237,7 @@ for i in range(len(spotpris)):
            else:
                prod_flis.append(max_flis[i])
                prod_hp.append(con_total[i]-max_flis[i])
-"""
-plt.figure()
-plt.scatter(tid, prod_flis, marker='o', s=8, alpha=0.5, label='flis')
-plt.xlabel('Hour of the year [h]')
-plt.ylabel('Production MWh')
-plt.title('Production through the year from heatpump and boiler')
-plt.xlim(0,8760)
-plt.grid()
-plt.legend()
-plt.show()
-"""
-"""
-totally=np.add(prod_flis,prod_hp)
-plt.figure()
-plt.plot(con_total, label='Demand')
-#plt.plot(prod_hp,label='Total production')
-#plt.plot(prod_flis,label='Total production')
-plt.plot(totally,label='total production')
-plt.xlabel('Hour of the year[h]')
-plt.ylabel('Energy [MWh]')
-plt.title('Total demand and production for a week før opvarmning')
-plt.ylim(0,150)
-plt.xlim(2800,2968)
-plt.grid()
-plt.legend()
-plt.show()
-"""
+
     
 ##Løber igennem hvor mange sammehængende timer kedlen er slukket
 hours=[]
@@ -519,15 +359,15 @@ for c in range(len(sluk_timer)):
     ak_pris1.append(ak_pris)
     
     plt.figure()
-    plt.plot(ak_pris,label='Total cost', color=colors[c])
-    plt.plot(ak_pris_hp,label='Cost of HP production')
-    plt.plot(ak_pris_boiler,label='Cost of boiler production')
-    #plt.scatter(tid, prod_nyflis, marker='o', s=8, alpha=0.5, label='flis')
+    plt.plot(ak_pris,label='Total cost', color='lightcoral')
+    plt.plot(ak_pris_boiler,label='Cost of CHPP production',color='dodgerblue')
+    plt.plot(ak_pris_hp,label='Cost of MESHP production', color='darkorange')
     plt.grid()
     plt.xlim(0,8760)
-    plt.ylim(0,max(prod_nyflis))
-    plt.xlabel('Hour of the year')
-    plt.ylabel('[DKK mio.]')
+    plt.ylim(0,65)
+    plt.xlabel('Hour of the year [h]')
+    plt.ylabel('Cost [MDKK]')
+    plt.title('Scenario B, Accumulated cost of AEP')
     plt.legend()
     plt.show()
 
@@ -535,42 +375,35 @@ for c in range(len(sluk_timer)):
 
 ################      PLOTS       ##################################
 
+
+inputflis=[]
+for i in range(len(prod_nyflis)):
+    inputflis.append(prod_nyflis[i]/(0.6625+0.3375*copmek[i]))
+
+
 ##Årlig produktion
 print('Annual energy production: ', sum(samlet_prod)/1000, 'GWh')
 print('Annual boiler production including startup:', sum(prod_nyflis+opvarm_spild_flis)/1000, 'GWh')
 print('Annual production from HP:', sum(prod_nyhp)/1000, 'GWh')
-
+print('Weekly overproduction:', sum(samlet_prod[2800:2968])-sum(con_total[2800:2968]))
+print('Wood chip input:', (sum(inputflis+opvarm_spild_flis)/1000), 'GWh')
 
 
 ##Udregner LCOE
 
-#Basecase
-capex=409380000
-
-#Absorption
-#"""
-#capex_hp=158464500.5   #eta=0.5, 250grader, luft
-#capex_hp=159945477.1   #eta=0.5, 250grader, hav
-#capex_hp=222146496.0   #eta=0.7, 250grader, luft
-#capex_hp=222146496.0   #eta=0.7, 250grader, hav
-#capex_hp=210298682.9   #eta=0.5, 450grader, luft
-#capex_hp=210298682.9   #eta=0.5, 450grader, hav
-
-#capex=capex+capex_hp
-#"""
 
 #Mekanisk varmepumpe
-"""
+#"""
 capex_vaerk=434060000
 
 
-capex_hp=228900000 #Reciprocating air
-#capex_hp=138000000 #Reciprocating sea
+#capex_hp=228900000 #Reciprocating air
+capex_hp=138000000 #Reciprocating sea DETTE ER DEN BEDSTE
 #capex_hp=215400000 #Rotary screw air
 #capex_hp=131600000 #Rotary screw sea
 
 capex=capex_vaerk+capex_hp
-"""
+#"""
 
 opex=max(ak_pris)*1000000
 LCOE=(capex+opex*25)/(sum(samlet_prod)*25)
@@ -578,37 +411,41 @@ LCOE=(capex+opex*25)/(sum(samlet_prod)*25)
 print('Opex=', opex/sum(samlet_prod), 'DKK/MWh')
 print('Capex=', capex/1000000, 'MDKK')
 print('LCOE=', LCOE, 'DKK/MWh')
-print('Wood chip percentage:', (sum(prod_nyflis+opvarm_spild_flis)/1000)/(sum(samlet_prod)/1000))
+#print('Wood chip percentage:', (sum(prod_nyflis+opvarm_spild_flis)/1000)/(sum(samlet_prod)/1000))
 
 #Scatter plot for production fra flis og HP
 
 for i in range(1):
     plt.figure()
-    plt.scatter(tid, prod_hp1[i], marker='o', s=5, alpha=0.5,label='HP',color='orange')
-    plt.scatter(tid, prod_flis1[i], marker='o', s=5, alpha=0.5, label='Boiler')
-    plt.scatter(tid, samlet_prod,  marker='o', s=5, alpha=0.5, label='samlet')
-    #plt.scatter(tid, spids_belast,marker='o', s=8, alpha=0.5, label = 'Spidsbelastning',color="purple")
+    plt.scatter(tid, samlet_prod,  marker='o', s=8, alpha=0.5, label='Total production',color='lightcoral')
+    plt.scatter(tid, prod_hp1[i], marker='o', s=8, alpha=0.5, label='MESHP',color='darkorange')
+    plt.scatter(tid, prod_flis1[i], marker='o', s=8, alpha=0.5,label='CHPP',color='dodgerblue')
     plt.xlabel('Hour of the year [h]')
     plt.ylabel('Production [MWh]')
-    plt.title('Production through the year from heatpump and boiler')
+    plt.title('Scenario B, Annual heat production.')
+    plt.ylim(0,152)
     plt.xlim(0,8760)
     plt.grid()
     plt.legend()
     plt.show()
     
     
+
 ##Produktion og consumption
 plt.figure()
-plt.plot(con_total, label='Demand')
-plt.plot(samlet_prod,label='Total production')
-plt.xlabel('Hour of the year[h]')
-plt.ylabel('Energy [MWh]')
-plt.title('Total demand and production for a week')
-plt.ylim(0,150)
+plt.plot(con_total, label='Demand',color='forestgreen')
+plt.plot(samlet_prod,label='Total production', color='lightcoral')
+plt.xlabel('Hour of the year [h]')
+plt.ylabel('Heat [MWh]')
+plt.title('Scenario B. Total demand and production for a week')
+plt.ylim(0,95)
 plt.xlim(2800,2968)
 plt.grid()
 plt.legend()
 plt.show()
+
+
+
 """
 
 plt.figure()
