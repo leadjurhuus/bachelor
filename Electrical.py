@@ -39,9 +39,9 @@ con_total = [0 if i < 0 else i for i in con_total] #Fjerner negative værdier og
 #fra "Klimastatus og –fremskrivning 2022 (KF22):Brændselspriser"
 flis_pris_opvarm=51*3600*0.001 #DKK/MWh
 #flis_pris=144.58 #DKK/MWh
-flis_pris= [123.2218286 for i in range(2190)]
-flis_pris.extend(132.1722699 for i in range(2*2190))
-flis_pris.extend(123.2218286 for i in range(2190))
+flis_pris= [119.2207792 for i in range(2190)]
+flis_pris.extend(109.6119403 for i in range(2*2190))
+flis_pris.extend(119.2207792 for i in range(2190))
 
 
 #Laver liste med COP (3 om vinter og 3.5 om sommeren)
